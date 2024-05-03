@@ -1,10 +1,17 @@
+from pathlib import Path
+
 from mimage.PngImagePlugin import PNGImage
 
 
-# fn open()
+# PNGImage opens these cases as well, should I just do one convert here?
+# What if people want to directly call PNGImage?
+fn open(image_path: StringLiteral) raises -> PNGImage:
+    return PNGImage(image_path)
 
 
-def main():
-    image = PNGImage(
-        "/home/ferdi/Workspace/personal/fnands.github.io/images/png_read_mojo/hopper.png"
-    )
+fn open(image_path: String) raises -> PNGImage:
+    return PNGImage(image_path)
+
+
+fn open(image_path: Path) raises -> PNGImage:
+    return PNGImage(image_path)

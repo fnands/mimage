@@ -165,7 +165,10 @@ struct PNGImage:
 
     fn __init__(inout self, file_name: Path) raises:
         self.image_path = file_name
-        assert_true(self.image_path.exists(), "File does not exist")
+        assert_true(
+            self.image_path.exists(),
+            "File '" + str(file_name) + "' does not exist",
+        )
 
         with open(self.image_path, "r") as image_file:
             self.raw_data = image_file.read_bytes()
