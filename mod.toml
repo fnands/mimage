@@ -1,12 +1,12 @@
 [package]
 name = "mimage"
 version = "0.1.0"
-description = "A Mojo Package"
-authors = ["your_name <you@email.com>"]
-license = ""
+description = "A Mojo library for parsing images"
+authors = ["Ferdinand Schenck <fwschenck@gmail.com>"]
+license = "Apache License v2.0 with LLVM Exceptions"
 repository = ""
 edition = "2023"
-mojo-version = "0.6.1"
+mojo-version = "24.3"
 
 
 [dependencies]
