@@ -7,7 +7,7 @@
   <h1 align="center">Mimage</h1>
 
   <p align="center">
-    A library for reading images in pure Mojo 🔥
+    A library for reading images in pure* Mojo 🔥
   </p>
 </p>
 
@@ -15,6 +15,7 @@
   <img src="https://img.shields.io/badge/%F0%9F%94%A5%20Mojo-020B14?style=for-the-badge&link=https%3A%2F%2Fwww.modular.com%2Fmax%2Fmojo" />
 </div>
 
+*Not pure Mojo yet, but hopefully soon.
 ## About The Project
 
 Mimage is a image manipulation library loosely based on Python's [Pillow](https://github.com/python-pillow/Pillow). The goal is to be able to read and write the most popular image formats directly from Mojo.
