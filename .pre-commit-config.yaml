@@ -1,0 +1,41 @@
+---
+default_language_version:
+  python: python3.12
+exclude: "^$"
+fail_fast: true
+repos:
+  # Simple hooks
+  # ------------
+
+  # pre-commit-hooks: some out-of-the-box hooks for pre-commit.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+        name: "[file -  check] large file"
+        args: [--maxkb=5000]
+      - id: check-byte-order-marker
+        name: "[file -  check] byte order marker"
+      - id: check-case-conflict
+        name: "[file -  check] case conflict"
+      - id: check-json
+        name: "[json -  check] validate json"
+      - id: check-merge-conflict
+        name: "[git  -  check] merge conflict"
+      - id: check-symlinks
+        name: "[link -  check] broken symlinks"
+      - id: check-xml
+        name: "[xml  -  check] validate xml"
+      - id: check-yaml
+        name: "[yaml -  check] validate yaml"
+        args: [--unsafe]
+        exclude: .gitlab-ci.yml
+      - id: mixed-line-ending
+        name: "[file - format] mixed line ending"
+        args: [--fix=auto]
+      - id: pretty-format-json
+        name: "[json - format] pretty json"
+        args: [--autofix, --indent=4, --no-sort-keys]
+      - id: trailing-whitespace
+        name: "[file - format] trim trailing whitespace"
+        args: [--markdown-linebreak-ext=md]
