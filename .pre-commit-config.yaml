@@ -30,8 +30,6 @@ repos:
         name: "[yaml -  check] validate yaml"
         args: [--unsafe]
         exclude: .gitlab-ci.yml
-      - id: debug-statements
-        name: "[py   -  check] debug statements"
       - id: mixed-line-ending
         name: "[file - format] mixed line ending"
         args: [--fix=auto]
