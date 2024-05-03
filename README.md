@@ -1,2 +1,3 @@
 # mimage
-A library for parsing images in Mojo
+
+- a Mojo library for parsing images.
