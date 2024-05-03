@@ -6,7 +6,7 @@ authors = ["Ferdinand Schenck <fwschenck@gmail.com>"]
 license = "Apache License v2.0 with LLVM Exceptions"
 repository = ""
 edition = "2023"
-mojo-version = "24.3"
+mojo-version = "24.3.0"
 
 
 [dependencies]
