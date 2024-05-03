@@ -1,0 +1,12 @@
+[package]
+name = "mimage"
+version = "0.1.0"
+description = "A Mojo Package"
+authors = ["your_name <you@email.com>"]
+license = ""
+repository = ""
+edition = "2023"
+mojo-version = "0.6.1"
+
+
+[dependencies]
