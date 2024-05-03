@@ -35,11 +35,12 @@ mojo -I .  tests/test_open_png.mojo
 - [x] Read simple 8-bit PNGs
 
 ### Near term
-- [] Read jpegs
+- [ ] Read jpegs
 
 ### Medium term
-- [] Write PNGs
-- [] Write jpegs
+- [ ] Read more complex PNGs
+- [ ] Write PNGs
+- [ ] Write jpegs
 
 ### Long term
 - [ ] v1.0.0 will be achieved when Mimage can open all the same images as Pillow.
