@@ -45,6 +45,7 @@ repos:
       - id: mojo-format
         name: "[mojo - format] format mojo code"
         entry: mojo format
+        args: [--line-length 119]
         language: system
         files: '\.(mojo|🔥)$'
         stages: [commit]
