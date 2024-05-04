@@ -23,7 +23,7 @@ struct Image:
         Args:
             image: The raw image object.
         """
-        self.raw_image = image^
+        self.raw_image = image
         self.width = image.width
         self.height = image.height
         self.channels = image.channels
