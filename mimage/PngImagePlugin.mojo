@@ -184,7 +184,7 @@ def parse_next_chunk(data: List[Int8], read_head: Int) -> Chunk:
     )
 
 
-struct PNGImage:
+struct PNGImage(Copyable, Movable):
     """A struct representing a PNG Image."""
 
     var image_path: Path
@@ -317,6 +317,44 @@ struct PNGImage:
             Error: If the file is not a PNG, is interlaced, or has an unsupported color type or bit depth.
         """
         self.__init__(Path(file_name))
+
+    fn __moveinit__(inout self, owned existing: PNGImage):
+        """Move data of an existing PNGImage into a new one.
+
+        Args:
+            existing: The existing PNGImage.
+        """
+        self.image_path = existing.image_path
+        self.raw_data = existing.raw_data
+        self.width = existing.width
+        self.height = existing.height
+        self.channels = existing.channels
+        self.bit_depth = existing.bit_depth
+        self.color_type = existing.color_type
+        self.compression_method = existing.compression_method
+        self.filter_method = existing.filter_method
+        self.interlaced = existing.interlaced
+        self.data = existing.data
+        self.data_type = existing.data_type
+
+    fn __copyinit__(inout self, existing: PNGImage):
+        """Copy constructor for the PNGImage struct.
+
+        Args:
+          existing: The existing struct to copy from.
+        """
+        self.image_path = existing.image_path
+        self.raw_data = existing.raw_data
+        self.width = existing.width
+        self.height = existing.height
+        self.channels = existing.channels
+        self.bit_depth = existing.bit_depth
+        self.color_type = existing.color_type
+        self.compression_method = existing.compression_method
+        self.filter_method = existing.filter_method
+        self.interlaced = existing.interlaced
+        self.data = existing.data
+        self.data_type = existing.data_type
 
     fn to_tensor(self) raises -> Tensor[DType.uint8]:
         """Converts the PNG image to a Tensor.
