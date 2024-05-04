@@ -3,8 +3,19 @@ from testing import assert_true
 from algorithm import vectorize
 from sys.info import simdwidthof
 
+# a recommended batch size for your machine
+alias simd_width = simdwidthof[DType.uint32]()
+
 
 fn bytes_to_string(list: List[Int8]) -> String:
+    """Converts a list of bytes to a string.
+
+    Args:
+        list: The List of bytes.
+
+    Returns:
+        The String representation of the bytes.
+    """
     var word = String("")
     for letter in list:
         word += chr(int(letter[].cast[DType.uint8]()))
@@ -13,6 +24,14 @@ fn bytes_to_string(list: List[Int8]) -> String:
 
 
 fn bytes_to_hex_string(list: List[Int8]) -> String:
+    """Converts a list of bytes to a hex string.
+
+    Args:
+        list: The List of bytes.
+
+    Returns:
+        The hex String representation of the bytes.
+    """
     var word = String("")
     for letter in list:
         word += hex(int(letter[].cast[DType.uint8]()))
@@ -20,11 +39,18 @@ fn bytes_to_hex_string(list: List[Int8]) -> String:
     return word
 
 
-# a recommended batch size for your machine
-alias simd_width = simdwidthof[DType.uint32]()
-
-
 fn bytes_to_uint32_be(owned list: List[Int8]) raises -> List[UInt32]:
+    """Converts a list of bytes into a list of UInt32s.
+
+    Args:
+        list: The List of bytes.
+
+    Returns:
+        Input data translated to a List of UInt32.
+
+    Raises:
+        ValueError: If the length of the input list is not a multiple of 4.
+    """
     assert_true(
         len(list) % 4 == 0,
         "List[Int8] length must be a multiple of 4 to convert to List[Int32]",

@@ -10,7 +10,7 @@ alias zlib_type = fn (
 ) -> Int
 
 
-fn log_zlib_result(Z_RES: Int, compressing: Bool = True) raises -> NoneType:
+fn _log_zlib_result(Z_RES: Int, compressing: Bool = True) raises -> NoneType:
     var prefix: String = ""
     if not compressing:
         prefix = "un"
@@ -40,6 +40,18 @@ fn log_zlib_result(Z_RES: Int, compressing: Bool = True) raises -> NoneType:
 
 
 fn uncompress(data: List[Int8], quiet: Bool = True) raises -> List[UInt8]:
+    """Uncompresses a zlib compressed byte List.
+
+    Args:
+        data: The zlib compressed byte List.
+        quiet: Whether to print the result of the zlib operation. Defaults to True.
+
+    Returns:
+        The uncompressed byte List.
+
+    Raises:
+        Error: If the zlib operation fails.
+    """
     var data_memory_amount: Int = len(data) * 4
     var handle = ffi.DLHandle("")
     var zlib_uncompress = handle.get_function[zlib_type]("uncompress")
@@ -61,7 +73,7 @@ fn uncompress(data: List[Int8], quiet: Bool = True) raises -> List[UInt8]:
     )
 
     if not quiet:
-        log_zlib_result(Z_RES, compressing=False)
+        _log_zlib_result(Z_RES, compressing=False)
         print("Uncompressed length: " + str(uncompressed_len[0]))
     # Can probably do something more efficient here with pointers, but eh.
     var res = List[UInt8]()

@@ -14,25 +14,25 @@ from mimage.utils.compression import uncompress
 from mimage.utils.files import determine_file_type
 
 
-fn undo_trivial(
+fn _undo_trivial(
     current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0
 ) -> Int16:
     return current
 
 
-fn undo_sub(
+fn _undo_sub(
     current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0
 ) -> Int16:
     return current + left
 
 
-fn undo_up(
+fn _undo_up(
     current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0
 ) -> Int16:
     return current + above
 
 
-fn undo_average(
+fn _undo_average(
     current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0
 ) -> Int16:
     return current + (
@@ -40,7 +40,7 @@ fn undo_average(
     )  # Bitshift is equivalent to division by 2
 
 
-fn undo_paeth(
+fn _undo_paeth(
     current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0
 ) -> Int16:
     var peath: Int16 = left + above - above_left
@@ -55,7 +55,7 @@ fn undo_paeth(
         return current + above_left
 
 
-fn undo_filter(
+fn _undo_filter(
     filter_type: UInt8,
     current: UInt8,
     left: UInt8 = 0,
@@ -69,19 +69,19 @@ fn undo_filter(
     var result_int: Int16 = 0
 
     if filter_type == 0:
-        result_int = undo_trivial(
+        result_int = _undo_trivial(
             current_int, left_int, above_int, above_left_int
         )
     elif filter_type == 1:
-        result_int = undo_sub(current_int, left_int, above_int, above_left_int)
+        result_int = _undo_sub(current_int, left_int, above_int, above_left_int)
     elif filter_type == 2:
-        result_int = undo_up(current_int, left_int, above_int, above_left_int)
+        result_int = _undo_up(current_int, left_int, above_int, above_left_int)
     elif filter_type == 3:
-        result_int = undo_average(
+        result_int = _undo_average(
             current_int, left_int, above_int, above_left_int
         )
     elif filter_type == 4:
-        result_int = undo_paeth(
+        result_int = _undo_paeth(
             current_int, left_int, above_int, above_left_int
         )
     else:
@@ -90,11 +90,18 @@ fn undo_filter(
 
 
 struct Chunk(Movable, Copyable):
+    """A struct representing a PNG chunk."""
+
     var length: UInt32
+    """The lengh of the chunk (in bytes)."""
     var type: String
+    """The type of the chunk."""
     var data: List[Int8]
+    """The data contained in the chunk."""
     var crc: UInt32
+    """The CRC32 checksum of the chunk."""
     var end: Int
+    """The position in the data list where the chunk ends."""
 
     fn __init__(
         inout self,
@@ -104,6 +111,15 @@ struct Chunk(Movable, Copyable):
         crc: UInt32,
         end: Int,
     ):
+        """Initializes a new Chunk struct.
+
+        Args:
+            length: The length of the chunk.
+            chunk_type: The type of the chunk.
+            data: The data contained in the chunk.
+            crc: The CRC32 checksum of the chunk.
+            end: The position in the data list where the chunk ends.
+        """
         self.length = length
         self.type = chunk_type
         self.data = data
@@ -111,6 +127,11 @@ struct Chunk(Movable, Copyable):
         self.end = end
 
     fn __moveinit__(inout self, owned existing: Chunk):
+        """Move data of an existing Chunk into a new one.
+
+        Args:
+            existing: The existing Chunk.
+        """
         self.length = existing.length
         self.type = existing.type
         self.data = existing.data
@@ -118,6 +139,11 @@ struct Chunk(Movable, Copyable):
         self.end = existing.end
 
     fn __copyinit__(inout self, existing: Chunk):
+        """Copy constructor for the Chunk struct.
+
+        Args:
+          existing: The existing struct to copy from.
+        """
         self.length = existing.length
         self.type = existing.type
         self.data = existing.data
@@ -159,20 +185,42 @@ def parse_next_chunk(data: List[Int8], read_head: Int) -> Chunk:
 
 
 struct PNGImage:
+    """A struct representing a PNG Image."""
+
     var image_path: Path
+    """The path to the PNG image."""
     var raw_data: List[Int8]
+    """The raw bytes of the PNG image."""
     var width: Int
+    """The width of the PNG image."""
     var height: Int
+    """The height of the PNG image."""
     var channels: Int
+    """The number of channels in the PNG image."""
     var bit_depth: Int
+    """The bit depth of the PNG image."""
     var color_type: Int
+    """The color type of the PNG image."""
     var compression_method: UInt8
+    """The compression method of the PNG image."""
     var filter_method: UInt8
+    """The filter method of the PNG image."""
     var interlaced: UInt8
+    """Whether the PNG image is interlaced."""
     var data: List[UInt8]
+    """The uncompressed data of the PNG image."""
     var data_type: DType
+    """The data type of the PNG image. Either uint8 or uint16."""
 
     fn __init__(inout self, file_name: Path) raises:
+        """Initializes a new PNGImage struct.
+
+        Args:
+            file_name: The path to the PNG file.
+
+        Raises:
+            Error: If the file is not a PNG, is interlaced, or has an unsupported color type or bit depth.
+        """
         self.image_path = file_name
         assert_true(
             self.image_path.exists(),
@@ -248,13 +296,34 @@ struct PNGImage:
 
     # In case the filename is passed as a String
     fn __init__(inout self, file_name: String) raises:
+        """Initializes a new PNGImage struct.
+
+        Args:
+            file_name: The path to the PNG file.
+
+        Raises:
+            Error: If the file is not a PNG, is interlaced, or has an unsupported color type or bit depth.
+        """
         self.__init__(Path(file_name))
 
     # In case the filename is passed as a StringLiteral
     fn __init__(inout self, file_name: StringLiteral) raises:
+        """Initializes a new PNGImage struct.
+
+        Args:
+            file_name: The path to the PNG file.
+
+        Raises:
+            Error: If the file is not a PNG, is interlaced, or has an unsupported color type or bit depth.
+        """
         self.__init__(Path(file_name))
 
     fn to_tensor(self) raises -> Tensor[DType.uint8]:
+        """Converts the PNG image to a Tensor.
+
+        Returns:
+            A Tensor containing the image data.
+        """
         var spec = TensorSpec(
             DType.uint8, self.height, self.width, self.channels
         )
@@ -281,7 +350,7 @@ struct PNGImage:
                     above_left = previous_result[i - pixel_size]
 
                 result.append(
-                    undo_filter(
+                    _undo_filter(
                         filter_type,
                         self.data[i + offset],
                         left,

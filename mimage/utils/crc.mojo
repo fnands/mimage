@@ -2,9 +2,18 @@ from math.bit import bitreverse
 
 
 fn CRC32(
-    owned data: List[SIMD[DType.int8, 1]],
+    data: List[SIMD[DType.int8, 1]],
     value: SIMD[DType.uint32, 1] = 0xFFFFFFFF,
 ) -> SIMD[DType.uint32, 1]:
+    """Calculate the CRC32 value for a given list of bytes.
+
+    Args:
+        data: The list of bytes for chich to calulate the CRC32 value.
+        value: The initial value of the CRC32 calculation.
+
+    Returns:
+        The CRC32 value for the given list of bytes.
+    """
     var crc32 = value
     for byte in data:
         crc32 = (bitreverse(byte[]).cast[DType.uint32]() << 24) ^ crc32
