@@ -16,27 +16,13 @@ fn _log_zlib_result(Z_RES: Int, compressing: Bool = True) raises -> NoneType:
         prefix = "un"
 
     if Z_RES == 0:
-        print(
-            "OK "
-            + prefix.upper()
-            + "COMPRESSING: Everything "
-            + prefix
-            + "compressed fine"
-        )
+        print("OK " + prefix.upper() + "COMPRESSING: Everything " + prefix + "compressed fine")
     elif Z_RES == -4:
-        raise Error(
-            "ERROR " + prefix.upper() + "COMPRESSING: Not enought memory"
-        )
+        raise Error("ERROR " + prefix.upper() + "COMPRESSING: Not enought memory")
     elif Z_RES == -5:
-        raise Error(
-            "ERROR "
-            + prefix.upper()
-            + "COMPRESSING: Buffer have not enough memory"
-        )
+        raise Error("ERROR " + prefix.upper() + "COMPRESSING: Buffer have not enough memory")
     else:
-        raise Error(
-            "ERROR " + prefix.upper() + "COMPRESSING: Unhandled exception"
-        )
+        raise Error("ERROR " + prefix.upper() + "COMPRESSING: Unhandled exception")
 
 
 fn uncompress(data: List[Int8], quiet: Bool = True) raises -> List[UInt8]:

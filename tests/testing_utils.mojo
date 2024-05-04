@@ -12,7 +12,6 @@ fn compare_to_numpy(mojo_tensor: Tensor, image_path: StringLiteral) raises:
         for columns in range(mojo_tensor.shape()[1]):
             for channels in range(mojo_tensor.shape()[2]):
                 assert_true(
-                    mojo_tensor[rows, columns, channels]
-                    == py_array[rows][columns][channels].__int__(),
+                    mojo_tensor[rows, columns, channels] == py_array[rows][columns][channels].__int__(),
                     "Pixel values do not match",
                 )

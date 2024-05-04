@@ -14,35 +14,23 @@ from mimage.utils.compression import uncompress
 from mimage.utils.files import determine_file_type
 
 
-fn _undo_trivial(
-    current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0
-) -> Int16:
+fn _undo_trivial(current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0) -> Int16:
     return current
 
 
-fn _undo_sub(
-    current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0
-) -> Int16:
+fn _undo_sub(current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0) -> Int16:
     return current + left
 
 
-fn _undo_up(
-    current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0
-) -> Int16:
+fn _undo_up(current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0) -> Int16:
     return current + above
 
 
-fn _undo_average(
-    current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0
-) -> Int16:
-    return current + (
-        (above + left) >> 1
-    )  # Bitshift is equivalent to division by 2
+fn _undo_average(current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0) -> Int16:
+    return current + ((above + left) >> 1)  # Bitshift is equivalent to division by 2
 
 
-fn _undo_paeth(
-    current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0
-) -> Int16:
+fn _undo_paeth(current: Int16, left: Int16 = 0, above: Int16 = 0, above_left: Int16 = 0) -> Int16:
     var peath: Int16 = left + above - above_left
     var peath_a: Int16 = abs(peath - left)
     var peath_b: Int16 = abs(peath - above)
@@ -69,21 +57,15 @@ fn _undo_filter(
     var result_int: Int16 = 0
 
     if filter_type == 0:
-        result_int = _undo_trivial(
-            current_int, left_int, above_int, above_left_int
-        )
+        result_int = _undo_trivial(current_int, left_int, above_int, above_left_int)
     elif filter_type == 1:
         result_int = _undo_sub(current_int, left_int, above_int, above_left_int)
     elif filter_type == 2:
         result_int = _undo_up(current_int, left_int, above_int, above_left_int)
     elif filter_type == 3:
-        result_int = _undo_average(
-            current_int, left_int, above_int, above_left_int
-        )
+        result_int = _undo_average(current_int, left_int, above_int, above_left_int)
     elif filter_type == 4:
-        result_int = _undo_paeth(
-            current_int, left_int, above_int, above_left_int
-        )
+        result_int = _undo_paeth(current_int, left_int, above_int, above_left_int)
     else:
         raise Error("Unknown filter type")
     return result_int.cast[DType.uint8]()
@@ -272,9 +254,7 @@ struct PNGImage(Copyable, Movable):
         # Check if the image is interlaced
         assert_true(self.interlaced == 0, "Interlaced images are not supported")
         # Chack compression method
-        assert_true(
-            self.compression_method == 0, "Compression method not supported"
-        )
+        assert_true(self.compression_method == 0, "Compression method not supported")
 
         # Scan over chunks until end found
         var ended = False
@@ -362,9 +342,7 @@ struct PNGImage(Copyable, Movable):
         Returns:
             A Tensor containing the image data.
         """
-        var spec = TensorSpec(
-            DType.uint8, self.height, self.width, self.channels
-        )
+        var spec = TensorSpec(DType.uint8, self.height, self.width, self.channels)
         var tensor_image = Tensor[DType.uint8](spec)
 
         var pixel_size: Int = self.channels * (self.bit_depth // 8)
@@ -400,8 +378,6 @@ struct PNGImage(Copyable, Movable):
             previous_result = result
             for i in range(self.width):
                 for j in range(self.channels):
-                    tensor_image[Index(line, i, j)] = result[
-                        i * self.channels + j
-                    ]
+                    tensor_image[Index(line, i, j)] = result[i * self.channels + j]
 
         return tensor_image
