@@ -125,7 +125,16 @@ struct Chunk(Movable, Copyable):
         self.end = existing.end
 
 
-def parse_next_chunk(owned data: List[Int8], read_head: Int) -> Chunk:
+def parse_next_chunk(data: List[Int8], read_head: Int) -> Chunk:
+    """Parses the chunk starting at read head.
+
+    Args:
+        data: A list containing the raw data in the PNG file.
+        read_head: The position in the data list to start reading the chunk.
+
+    Returns:
+        A Chunk struct containing the information contained in the chink starting at read head.
+    """
     chunk_length = bytes_to_uint32_be(data[read_head : read_head + 4])[0]
     chunk_type = bytes_to_string(data[read_head + 4 : read_head + 8])
     start_data = int(read_head + 8)
