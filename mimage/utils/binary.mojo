@@ -50,9 +50,6 @@ fn bytes_to_uint32_be(owned list: List[Int8]) raises -> List[UInt32]:
     # swap the bytes in each UInt32 to convert from big-endian to little-endian
     vectorize[_bswap, simd_width](result_length)
 
-    var result = List[UInt32]()
-    result.data = ptr_to_uint32
-    result.capacity = result_length
-    result.size = result_length
-
-    return result
+    return List[UInt32](
+        data=ptr_to_uint32, size=result_length, capacity=result_length
+    )
