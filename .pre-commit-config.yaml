@@ -49,7 +49,7 @@ repos:
         files: '\.(mojo|🔥)$'
         stages: [commit]
       - id: check-docstrings
-        name: "[mojo - check-docstrings] check docstrings"
+        name: "[mojo - check] check docstrings"
         entry: python3 ./scripts/check-docstrings.py
         language: system
         pass_filenames: false
