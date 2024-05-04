@@ -1,4 +1,4 @@
-from mimage import Image
+import mimage.Image as Image
 from pathlib import Path
 from tests import compare_to_numpy
 

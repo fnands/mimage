@@ -22,9 +22,21 @@ Mimage is a image manipulation library loosely based on Python's [Pillow](https:
 
 ## Quick Start
 
-Try out the benchmarks yourself:
+Basic usage:
 
+```mojo
+import mimage.Image as Image
+
+def main():
+
+  image = Image.open("my/png/image.png")
+
+  tensor = image.to_tensor()
 ```
+
+Try out the tests yourself:
+
+```bash
 mojo -I .  tests/test_open_png.mojo
 ```
 
