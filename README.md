@@ -25,13 +25,12 @@ Mimage is a image manipulation library loosely based on Python's [Pillow](https:
 Basic usage:
 
 ```mojo
-import mimage.Image as Image
+import mimage as mi
 
 def main():
 
-  image = Image.open("my/png/image.png")
+  tensor = mi.imread("my/png/image.png")
 
-  tensor = image.to_tensor()
 ```
 
 Try out the tests yourself:
