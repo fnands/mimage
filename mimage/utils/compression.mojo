@@ -38,7 +38,7 @@ fn uncompress(data: List[Int8], quiet: Bool = True) raises -> List[UInt8]:
     Raises:
         Error: If the zlib operation fails.
     """
-    var data_memory_amount: Int = len(data) * 4
+    var data_memory_amount: Int = len(data) * 10
     var handle = ffi.DLHandle("")
     var zlib_uncompress = handle.get_function[zlib_type]("uncompress")
 
