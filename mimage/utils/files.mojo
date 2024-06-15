@@ -1,7 +1,7 @@
 from mimage.utils.binary import bytes_to_hex_string
 
 
-fn determine_file_type(data: List[Int8]) -> String:
+fn determine_file_type(data: List[UInt8]) -> String:
     """Determine the type of the file by reading the first few bytes.
 
     Args:
