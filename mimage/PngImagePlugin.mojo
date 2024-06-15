@@ -1,4 +1,3 @@
-from math import abs
 from tensor import Tensor, TensorSpec, TensorShape
 from utils.index import Index
 from testing import assert_true
@@ -78,7 +77,7 @@ struct Chunk(Movable, Copyable):
     """The lengh of the chunk (in bytes)."""
     var type: String
     """The type of the chunk."""
-    var data: List[Int8]
+    var data: List[UInt8]
     """The data contained in the chunk."""
     var crc: UInt32
     """The CRC32 checksum of the chunk."""
@@ -89,7 +88,7 @@ struct Chunk(Movable, Copyable):
         inout self,
         length: UInt32,
         chunk_type: String,
-        data: List[Int8],
+        data: List[UInt8],
         crc: UInt32,
         end: Int,
     ):
@@ -133,7 +132,7 @@ struct Chunk(Movable, Copyable):
         self.end = existing.end
 
 
-def parse_next_chunk(data: List[Int8], read_head: Int) -> Chunk:
+def parse_next_chunk(data: List[UInt8], read_head: Int) -> Chunk:
     """Parses the chunk starting at read head.
 
     Args:
@@ -171,7 +170,7 @@ struct PNGImage(Copyable, Movable):
 
     var image_path: Path
     """The path to the PNG image."""
-    var raw_data: List[Int8]
+    var raw_data: List[UInt8]
     """The raw bytes of the PNG image."""
     var width: Int
     """The width of the PNG image."""
@@ -259,7 +258,7 @@ struct PNGImage(Copyable, Movable):
         # Scan over chunks until end found
         var ended = False
         var data_found = False
-        var uncompressd_data = List[Int8]()
+        var uncompressd_data = List[UInt8]()
         while read_head < len(self.raw_data) and not ended:
             var chunk = parse_next_chunk(self.raw_data, read_head)
             read_head = chunk.end

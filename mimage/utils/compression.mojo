@@ -1,6 +1,6 @@
 from sys import ffi
 
-alias Bytef = Scalar[DType.int8]
+alias Bytef = Scalar[DType.uint8]
 alias uLong = UInt64
 alias zlib_type = fn (
     _out: Pointer[Bytef],
@@ -25,7 +25,7 @@ fn _log_zlib_result(Z_RES: Int, compressing: Bool = True) raises -> NoneType:
         raise Error("ERROR " + prefix.upper() + "COMPRESSING: Unhandled exception")
 
 
-fn uncompress(data: List[Int8], quiet: Bool = True) raises -> List[UInt8]:
+fn uncompress(data: List[UInt8], quiet: Bool = True) raises -> List[UInt8]:
     """Uncompresses a zlib compressed byte List.
 
     Args:
@@ -64,5 +64,5 @@ fn uncompress(data: List[Int8], quiet: Bool = True) raises -> List[UInt8]:
     # Can probably do something more efficient here with pointers, but eh.
     var res = List[UInt8]()
     for i in range(uncompressed_len[0]):
-        res.append(uncompressed[i].cast[DType.uint8]())
+        res.append(uncompressed[i])
     return res
