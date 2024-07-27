@@ -437,3 +437,8 @@ output/
 deps
 .deps/
 
+# pixi environments
+.pixi
+*.egg-info
+# magic environments
+.magic
