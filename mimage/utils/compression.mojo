@@ -1,16 +1,18 @@
 from sys import ffi
+from memory import memset_zero
+
 
 alias Bytef = Scalar[DType.uint8]
 alias uLong = UInt64
 alias zlib_type = fn (
-    _out: Pointer[Bytef],
-    _out_len: Pointer[UInt64],
-    _in: Pointer[Bytef],
+    _out: UnsafePointer[Bytef],
+    _out_len: UnsafePointer[UInt64],
+    _in: UnsafePointer[Bytef],
     _in_len: uLong,
 ) -> Int
 
 
-fn _log_zlib_result(Z_RES: Int, compressing: Bool = True) raises -> NoneType:
+fn _log_zlib_result(Z_RES: Int, compressing: Bool = True) raises -> None:
     var prefix: String = ""
     if not compressing:
         prefix = "un"
@@ -39,15 +41,15 @@ fn uncompress(data: List[UInt8], quiet: Bool = True) raises -> List[UInt8]:
         Error: If the zlib operation fails.
     """
     var data_memory_amount: Int = len(data) * 10
-    var handle = ffi.DLHandle("")
+    var handle = ffi.DLHandle(".magic/envs/default/lib/libz.so.1")
     var zlib_uncompress = handle.get_function[zlib_type]("uncompress")
 
-    var uncompressed = Pointer[Bytef].alloc(data_memory_amount)
-    var compressed = Pointer[Bytef].alloc(len(data))
-    var uncompressed_len = Pointer[uLong].alloc(1)
+    var uncompressed = UnsafePointer[Bytef].alloc(data_memory_amount)
+    var compressed = UnsafePointer[Bytef].alloc(len(data))
+    var uncompressed_len = UnsafePointer[uLong].alloc(1)
     memset_zero(uncompressed, data_memory_amount)
     memset_zero(uncompressed_len, 1)
-    uncompressed_len[0] = data_memory_amount
+    uncompressed_len.init_pointee_copy(data_memory_amount)
     for i in range(len(data)):
         compressed.store(i, data[i])
 
@@ -60,7 +62,6 @@ fn uncompress(data: List[UInt8], quiet: Bool = True) raises -> List[UInt8]:
 
     if not quiet:
         _log_zlib_result(Z_RES, compressing=False)
-        print("Uncompressed length: " + str(uncompressed_len[0]))
     # Can probably do something more efficient here with pointers, but eh.
     var res = List[UInt8]()
     for i in range(uncompressed_len[0]):

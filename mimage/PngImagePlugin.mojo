@@ -215,7 +215,6 @@ struct PNGImage(Copyable, Movable):
             determine_file_type(self.raw_data) == "PNG",
             "File is not a PNG. Only PNGs are supported",
         )
-
         var read_head = 8
 
         var header_chunk = parse_next_chunk(self.raw_data, read_head)

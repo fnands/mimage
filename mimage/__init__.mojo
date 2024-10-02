@@ -1,6 +1,7 @@
 from tensor import Tensor
 from pathlib import Path
 from mimage.PngImagePlugin import PNGImage
+from collections import Dict
 
 
 # PNGImage opens these cases as well, should I just do one convert here?

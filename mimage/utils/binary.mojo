@@ -61,9 +61,9 @@ fn bytes_to_uint32_be(owned list: List[UInt8]) raises -> List[UInt32]:
     # This avoids copying and makes sure only one List owns a pointer to the underlying address.
     var ptr_to_uint8 = list.steal_data()
     var ptr_to_uint32 = ptr_to_uint8.bitcast[UInt32]()
-    var dtype_ptr = DTypePointer[DType.uint32](Pointer[UInt32](ptr_to_uint32.address))
+    var dtype_ptr = UnsafePointer[Scalar[DType.uint32]](ptr_to_uint32.address)
 
-    # vectorize byte_swap over DTypePointer
+    # vectorize byte_swap over UnsafePointer
     @parameter
     fn _byte_swap[_width: Int](i: Int):
         # call byte_swap on a batch of UInt32 values
