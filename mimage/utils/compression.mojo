@@ -1,11 +1,13 @@
 from sys import ffi
+from memory import memset_zero
+
 
 alias Bytef = Scalar[DType.uint8]
 alias uLong = UInt64
 alias zlib_type = fn (
-    _out: Pointer[Bytef],
-    _out_len: Pointer[UInt64],
-    _in: Pointer[Bytef],
+    _out: UnsafePointer[Bytef],
+    _out_len: UnsafePointer[UInt64],
+    _in: UnsafePointer[Bytef],
     _in_len: uLong,
 ) -> Int
 
@@ -42,9 +44,9 @@ fn uncompress(data: List[UInt8], quiet: Bool = True) raises -> List[UInt8]:
     var handle = ffi.DLHandle("")
     var zlib_uncompress = handle.get_function[zlib_type]("uncompress")
 
-    var uncompressed = Pointer[Bytef].alloc(data_memory_amount)
-    var compressed = Pointer[Bytef].alloc(len(data))
-    var uncompressed_len = Pointer[uLong].alloc(1)
+    var uncompressed = UnsafePointer[Bytef].alloc(data_memory_amount)
+    var compressed = UnsafePointer[Bytef].alloc(len(data))
+    var uncompressed_len = UnsafePointer[uLong].alloc(1)
     memset_zero(uncompressed, data_memory_amount)
     memset_zero(uncompressed_len, 1)
     uncompressed_len[0] = data_memory_amount
