@@ -258,9 +258,7 @@ struct PNGImage(Copyable, Movable):
         var ended = False
         var data_found = False
         var uncompressd_data = List[UInt8]()
-        var i = 0
         while read_head < len(self.raw_data) and not ended:
-            i += 1
             var chunk = parse_next_chunk(self.raw_data, read_head)
             read_head = chunk.end
 
