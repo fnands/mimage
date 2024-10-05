@@ -1,6 +1,6 @@
 [project]
 name = "mimage"
-version = "0.1.3"
+version = "0.1.4"
 description = "A Mojo library for parsing images"
 authors = ["Ferdinand Schenck <fwschenck@gmail.com>"]
 channels = ["conda-forge", "https://conda.modular.com/max"]
