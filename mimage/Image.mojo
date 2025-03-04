@@ -17,7 +17,7 @@ struct Image:
     var channels: Int
     """The number of channels in the image."""
 
-    fn __init__(inout self, image: PNGImage):
+    fn __init__(out self, image: PNGImage):
         """Initialize the Image struct.
 
         Args:

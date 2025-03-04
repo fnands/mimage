@@ -85,7 +85,7 @@ struct Chunk(Movable, Copyable):
     """The position in the data list where the chunk ends."""
 
     fn __init__(
-        inout self,
+        mut self,
         length: UInt32,
         chunk_type: String,
         data: List[UInt8],
@@ -107,7 +107,7 @@ struct Chunk(Movable, Copyable):
         self.crc = crc
         self.end = end
 
-    fn __moveinit__(inout self, owned existing: Chunk):
+    fn __moveinit__(mut self, owned existing: Chunk):
         """Move data of an existing Chunk into a new one.
 
         Args:
@@ -119,7 +119,7 @@ struct Chunk(Movable, Copyable):
         self.crc = existing.crc
         self.end = existing.end
 
-    fn __copyinit__(inout self, existing: Chunk):
+    fn __copyinit__(mut self, existing: Chunk):
         """Copy constructor for the Chunk struct.
 
         Args:
@@ -144,11 +144,11 @@ def parse_next_chunk(data: List[UInt8], read_head: Int) -> Chunk:
     """
     chunk_length = bytes_to_uint32_be(data[read_head : read_head + 4])[0]
     chunk_type = bytes_to_string(data[read_head + 4 : read_head + 8])
-    start_data = int(read_head + 8)
-    end_data = int(start_data + chunk_length)
+    start_data = Int(read_head + 8)
+    end_data = Int(start_data + chunk_length)
     chunk_data = data[start_data:end_data]
-    start_crc = int(end_data)
-    end_crc = int(start_crc + 4)
+    start_crc = Int(end_data)
+    end_crc = Int(start_crc + 4)
     chunk_crc = bytes_to_uint32_be(data[start_crc:end_crc])[0]
 
     # Check CRC
@@ -193,7 +193,7 @@ struct PNGImage(Copyable, Movable):
     var data_type: DType
     """The data type of the PNG image. Either uint8 or uint16."""
 
-    fn __init__(inout self, file_name: Path) raises:
+    fn __init__(out self, file_name: Path) raises:
         """Initializes a new PNGImage struct.
 
         Args:
@@ -205,7 +205,7 @@ struct PNGImage(Copyable, Movable):
         self.image_path = file_name
         assert_true(
             self.image_path.exists(),
-            "File '" + str(file_name) + "' does not exist",
+            "File '" + String(file_name) + "' does not exist",
         )
 
         with open(self.image_path, "r") as image_file:
@@ -220,10 +220,10 @@ struct PNGImage(Copyable, Movable):
         var header_chunk = parse_next_chunk(self.raw_data, read_head)
         read_head = header_chunk.end
 
-        self.width = int(bytes_to_uint32_be(header_chunk.data[0:4])[0])
-        self.height = int(bytes_to_uint32_be(header_chunk.data[4:8])[0])
-        self.bit_depth = int(header_chunk.data[8].cast[DType.uint32]())
-        self.color_type = int(header_chunk.data[9])
+        self.width = Int(bytes_to_uint32_be(header_chunk.data[0:4])[0])
+        self.height = Int(bytes_to_uint32_be(header_chunk.data[4:8])[0])
+        self.bit_depth = Int(header_chunk.data[8].cast[DType.uint32]())
+        self.color_type = Int(header_chunk.data[9])
         self.compression_method = header_chunk.data[10].cast[DType.uint8]()
         self.filter_method = header_chunk.data[11].cast[DType.uint8]()
         self.interlaced = header_chunk.data[12].cast[DType.uint8]()
@@ -273,7 +273,7 @@ struct PNGImage(Copyable, Movable):
         self.data = uncompress(uncompressd_data)
 
     # In case the filename is passed as a String
-    fn __init__(inout self, file_name: String) raises:
+    fn __init__(out self, file_name: String) raises:
         """Initializes a new PNGImage struct.
 
         Args:
@@ -282,10 +282,10 @@ struct PNGImage(Copyable, Movable):
         Raises:
             Error: If the file is not a PNG, is interlaced, or has an unsupported color type or bit depth.
         """
-        self.__init__(Path(file_name))
+        return PNGImage(Path(file_name))
 
     # In case the filename is passed as a StringLiteral
-    fn __init__(inout self, file_name: StringLiteral) raises:
+    fn __init__(out self, file_name: StringLiteral) raises:
         """Initializes a new PNGImage struct.
 
         Args:
@@ -294,9 +294,9 @@ struct PNGImage(Copyable, Movable):
         Raises:
             Error: If the file is not a PNG, is interlaced, or has an unsupported color type or bit depth.
         """
-        self.__init__(Path(file_name))
+        return PNGImage(Path(file_name))
 
-    fn __moveinit__(inout self, owned existing: PNGImage):
+    fn __moveinit__(out self, owned existing: PNGImage):
         """Move data of an existing PNGImage into a new one.
 
         Args:
@@ -315,7 +315,7 @@ struct PNGImage(Copyable, Movable):
         self.data = existing.data
         self.data_type = existing.data_type
 
-    fn __copyinit__(inout self, existing: PNGImage):
+    fn __copyinit__(out self, existing: PNGImage):
         """Copy constructor for the PNGImage struct.
 
         Args:

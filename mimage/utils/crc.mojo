@@ -26,7 +26,7 @@ fn fill_table_n_byte[n: Int]() -> List[UInt32]:
             table[i] = crc32
         else:
             var crc32 = table[i - 256]
-            var index = int(crc32.cast[DType.uint8]())
+            var index = Int(crc32.cast[DType.uint8]())
             table[i] = (crc32 >> 8) ^ table[index]
 
     return table
@@ -72,15 +72,15 @@ fn CRC32_table_n_byte_compact[word_size: Int](data: List[UInt8], table: List[UIn
 
             n = word_size - j * step_size
             crc32 = (
-                table[(n - 4) * 256 + int((vals >> 24).cast[DType.uint8]())]
-                ^ table[(n - 3) * 256 + int((vals >> 16).cast[DType.uint8]())]
-                ^ table[(n - 2) * 256 + int((vals >> 8).cast[DType.uint8]())]
-                ^ table[(n - 1) * 256 + int((vals >> 0).cast[DType.uint8]())]
+                table[(n - 4) * 256 + Int((vals >> 24).cast[DType.uint8]())]
+                ^ table[(n - 3) * 256 + Int((vals >> 16).cast[DType.uint8]())]
+                ^ table[(n - 2) * 256 + Int((vals >> 8).cast[DType.uint8]())]
+                ^ table[(n - 1) * 256 + Int((vals >> 0).cast[DType.uint8]())]
             ) ^ crc32
 
     for i in range(word_size * length, word_size * length + extra):
         var index = (crc32 ^ data[i].cast[DType.uint32]()) & 0xFF
-        crc32 = table[int(index)] ^ (crc32 >> 8)
+        crc32 = table[Int(index)] ^ (crc32 >> 8)
 
     return crc32 ^ 0xFFFFFFFF
 
