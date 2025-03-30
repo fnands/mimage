@@ -9,7 +9,7 @@ platforms = ["linux-64"]
 [tasks]
 
 [dependencies]
-max = ">=25.1,<25.2"
+max = ">=25.2,<25.3"
 
 [feature.dev.dependencies]
 pillow = ">=10.4.0,<10.5"

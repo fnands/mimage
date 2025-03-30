@@ -11,7 +11,6 @@ fn fill_table_n_byte[n: Int]() -> List[UInt32]:
         The table with pre-computed values for the CRC32 calculation.
     """
     var table = List[UInt32](capacity=256 * n)
-    table.size = 256 * n
 
     for i in range(256 * n):
         if i < 256:
