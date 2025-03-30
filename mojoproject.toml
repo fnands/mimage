@@ -1,6 +1,6 @@
 [project]
 name = "mimage"
-version = "0.1.4"
+version = "0.1.5"
 description = "A Mojo library for parsing images"
 authors = ["Ferdinand Schenck <fwschenck@gmail.com>"]
 channels = ["conda-forge", "https://conda.modular.com/max"]
@@ -9,7 +9,7 @@ platforms = ["linux-64"]
 [tasks]
 
 [dependencies]
-max = ">=24.5,<24.6"
+max = ">=25.2,<25.3"
 
 [feature.dev.dependencies]
 pillow = ">=10.4.0,<10.5"

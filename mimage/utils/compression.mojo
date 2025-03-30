@@ -1,5 +1,5 @@
 from sys import ffi
-from memory import memset_zero
+from memory import memset_zero, UnsafePointer
 
 
 alias Bytef = Scalar[DType.uint8]
