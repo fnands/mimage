@@ -245,8 +245,6 @@ struct PNGImage(Copyable, Movable):
         else:
             raise Error("Unknown bit depth")
 
-        print(self.color_type)
-
         # Check color_type and bit_depth
         assert_true(self.color_type == 2 or self.color_type == 6, "Only RGB(A) images are supported")
         assert_true(self.bit_depth == 8, "Only 8-bit images are supported")
