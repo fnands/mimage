@@ -246,7 +246,7 @@ struct PNGImage(Copyable, Movable):
             raise Error("Unknown bit depth")
 
         # Check color_type and bit_depth
-        assert_true(self.color_type == 2, "Only RGB images are supported")
+        assert_true(self.color_type == 2 or self.color_type == 6, "Only RGB(A) images are supported")
         assert_true(self.bit_depth == 8, "Only 8-bit images are supported")
 
         # Check if the image is interlaced
