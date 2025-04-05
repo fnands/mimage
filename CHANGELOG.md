@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+
+# 0.2.1
+
+### Fix
+- Change DLHandle path for libz
+
+# 0.2.0
+
+### Changed
+- Updated to Max 25.2
+
+### Fixed
+- Allow RGBA images to be opened.
+
+
+
 # 0.1.4
 
 ### Changed
