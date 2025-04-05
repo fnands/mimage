@@ -41,7 +41,7 @@ fn uncompress(data: List[UInt8], quiet: Bool = True) raises -> List[UInt8]:
         Error: If the zlib operation fails.
     """
     var data_memory_amount: Int = len(data) * 100
-    var handle = ffi.DLHandle(".magic/envs/default/lib/libz.so.1")
+    var handle = ffi.DLHandle("libz.so.1")
     var zlib_uncompress = handle.get_function[zlib_type]("uncompress")
 
     var uncompressed = UnsafePointer[Bytef].alloc(data_memory_amount)
