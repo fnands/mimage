@@ -1,6 +1,6 @@
 from sys import ffi
 from memory import memset_zero, UnsafePointer
-
+from sys import info, exit
 
 alias Bytef = Scalar[DType.uint8]
 alias uLong = UInt64
@@ -27,6 +27,19 @@ fn _log_zlib_result(Z_RES: Int, compressing: Bool = True) raises -> None:
         raise Error("ERROR " + prefix.upper() + "COMPRESSING: Unhandled exception")
 
 
+@parameter
+fn _dynamic_library_filepath(name: String) -> String:
+    if info.os_is_linux():
+        return name + ".so"
+    elif info.os_is_macos():
+        return name + ".dylib"
+    elif info.os_is_windows():
+        return name + ".dll"
+    else:
+        print("Unsupported os for dynamic library filepath determination")
+        return ""
+
+
 fn uncompress(data: List[UInt8], quiet: Bool = True) raises -> List[UInt8]:
     """Uncompresses a zlib compressed byte List.
 
@@ -41,7 +54,7 @@ fn uncompress(data: List[UInt8], quiet: Bool = True) raises -> List[UInt8]:
         Error: If the zlib operation fails.
     """
     var data_memory_amount: Int = len(data) * 100
-    var handle = ffi.DLHandle("libz.so.1")
+    var handle = ffi.DLHandle(_dynamic_library_filepath("libz"))
     var zlib_uncompress = handle.get_function[zlib_type]("uncompress")
 
     var uncompressed = UnsafePointer[Bytef].alloc(data_memory_amount)
