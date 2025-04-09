@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+# 0.2.2
 
-# 0.2.1
-
+### Fix
+- Add dynamic library filepath determination to work on MacOS and Windows.
 ### Fix
 - Change DLHandle path for libz
 
